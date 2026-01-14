@@ -162,30 +162,31 @@ export default function Dashboard() {
             animate={{ opacity: 1 }}
         >
             {/* Header Status Bar */}
-            <div className="flex flex-col md:flex-row justify-between items-center bg-white/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm border border-gray-100">
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center bg-white/80 backdrop-blur-sm p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800 tracking-tight">Hospital Command Center</h1>
-                    <p className="text-sm text-gray-500 flex items-center gap-2">
-                        <span className="relative flex h-3 w-3">
+                    <h1 className="text-xl md:text-2xl font-bold text-gray-800 tracking-tight">Hospital Command Center</h1>
+                    <p className="text-xs md:text-sm text-gray-500 flex items-center gap-2 mt-1">
+                        <span className="relative flex h-2 w-2 md:h-3 md:w-3">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 md:h-3 md:w-3 bg-green-500"></span>
                         </span>
-                        Real-Time System Online • {format(new Date(), 'EEEE, MMMM do, yyyy')}
+                        Real-Time System Online • <span className="hidden sm:inline">{format(new Date(), 'EEEE, MMMM do, yyyy')}</span>
+                        <span className="sm:hidden">{format(new Date(), 'MMM dd, yyyy')}</span>
                     </p>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3 mt-4 md:mt-0">
-                    <div className="flex items-center space-x-2 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100">
-                        <Users className="w-4 h-4 text-blue-600" />
-                        <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">{systemStats.activeUsers} Active</span>
+                <div className="flex flex-wrap items-center gap-2 md:gap-3 w-full lg:w-auto">
+                    <div className="flex items-center space-x-2 bg-blue-50 px-2 md:px-3 py-1.5 rounded-lg border border-blue-100">
+                        <Users className="w-3.5 h-3.5 md:w-4 md:h-4 text-blue-600" />
+                        <span className="text-[10px] md:text-xs font-bold text-blue-700 uppercase tracking-wider">{systemStats.activeUsers} Active</span>
                     </div>
-                    <div className="flex items-center space-x-2 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">
-                        <Activity className="w-4 h-4 text-emerald-600" />
-                        <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">{systemStats.latency}</span>
+                    <div className="flex items-center space-x-2 bg-emerald-50 px-2 md:px-3 py-1.5 rounded-lg border border-emerald-100">
+                        <Activity className="w-3.5 h-3.5 md:w-4 md:h-4 text-emerald-600" />
+                        <span className="text-[10px] md:text-xs font-bold text-emerald-700 uppercase tracking-wider">{systemStats.latency}</span>
                     </div>
-                    <div className="flex items-center space-x-3 bg-slate-100 px-4 py-1.5 rounded-lg border border-slate-200">
-                        <Clock className="w-4 h-4 text-slate-600" />
-                        <span className="font-mono font-bold text-slate-700 text-sm">
+                    <div className="flex items-center space-x-3 bg-slate-100 px-3 md:px-4 py-1.5 rounded-lg border border-slate-200 ml-auto lg:ml-0">
+                        <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-600" />
+                        <span className="font-mono font-bold text-slate-700 text-xs md:text-sm">
                             {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                     </div>

@@ -78,9 +78,8 @@ export default function PatientLayout() {
                 </div>
             </div>
 
-            {/* Main Content */}
-            <div className="flex-1 overflow-auto bg-gray-50">
-                <main className="p-4 md:p-8">
+            <div className="flex-1 overflow-auto bg-gray-50 pb-20 md:pb-0">
+                <main className="p-4 md:p-8 max-w-7xl mx-auto">
                     <Outlet />
                 </main>
             </div>

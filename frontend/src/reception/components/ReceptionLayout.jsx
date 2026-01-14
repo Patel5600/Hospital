@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -5,13 +6,17 @@ import {
     Users,
     Calendar,
     CreditCard,
-    LogOut
+    LogOut,
+    Menu,
+    X
 } from 'lucide-react';
 import clsx from 'clsx';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ReceptionLayout() {
     const { logout, user } = useAuth();
     const location = useLocation();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const navigation = [
         { name: 'Dashboard', href: '/reception/dashboard', icon: LayoutDashboard },
@@ -21,23 +26,50 @@ export default function ReceptionLayout() {
     ];
 
     return (
-        <div className="flex h-screen bg-gray-50">
+        <div className="flex h-screen bg-gray-50 overflow-hidden relative">
+            {/* Mobile Menu Toggle */}
+            <div className="lg:hidden fixed top-4 left-4 z-50">
+                <button
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    className="p-2 bg-white rounded-lg shadow-lg text-purple-600 hover:text-purple-700 focus:outline-none ring-1 ring-purple-100"
+                >
+                    {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                </button>
+            </div>
+
+            {/* Mobile Overlay */}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="fixed inset-0 bg-purple-900/40 backdrop-blur-sm z-40 lg:hidden"
+                    />
+                )}
+            </AnimatePresence>
+
             {/* Sidebar */}
-            <div className="flex flex-col w-64 bg-white border-r border-gray-200">
-                <div className="flex items-center justify-center h-16 border-b border-gray-200 bg-purple-600">
+            <motion.div
+                initial={false}
+                animate={{ x: isMobileMenuOpen ? 0 : (window.innerWidth < 1024 ? -256 : 0) }}
+                className="fixed lg:relative z-50 flex flex-col w-64 h-full bg-white border-r shadow-xl lg:shadow-none"
+            >
+                <div className="flex items-center justify-center h-16 border-b bg-purple-600 flex-shrink-0">
                     <h1 className="text-xl font-bold text-white tracking-wider">Reception</h1>
                 </div>
 
-                <div className="p-4 border-b bg-purple-50">
+                <div className="p-4 border-b bg-purple-50 flex-shrink-0">
                     <div className="flex items-center">
                         <div className="flex-shrink-0">
-                            <div className="w-10 h-10 bg-purple-200 rounded-full flex items-center justify-center text-purple-800 font-bold text-lg">
+                            <div className="w-10 h-10 bg-purple-200 rounded-full flex items-center justify-center text-purple-800 font-bold text-lg border-2 border-white shadow-sm">
                                 {user?.name?.charAt(0)}
                             </div>
                         </div>
-                        <div className="ml-3">
-                            <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-                            <p className="text-xs text-gray-500 capitalize">{user?.role}</p>
+                        <div className="ml-3 overflow-hidden">
+                            <p className="text-sm font-semibold text-gray-900 truncate">{user?.name}</p>
+                            <p className="text-xs text-purple-600 font-medium capitalize truncate">{user?.role}</p>
                         </div>
                     </div>
                 </div>
@@ -46,18 +78,20 @@ export default function ReceptionLayout() {
                     <nav className="px-2 space-y-1">
                         {navigation.map((item) => {
                             const Icon = item.icon;
+                            const isActive = location.pathname === item.href;
                             return (
                                 <Link
                                     key={item.name}
                                     to={item.href}
+                                    onClick={() => setIsMobileMenuOpen(false)}
                                     className={clsx(
-                                        'flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors',
-                                        location.pathname === item.href
-                                            ? 'bg-purple-100 text-purple-700'
+                                        'flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all',
+                                        isActive
+                                            ? 'bg-purple-100 text-purple-700 shadow-sm'
                                             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                     )}
                                 >
-                                    <Icon className="w-5 h-5 mr-3" />
+                                    <Icon className={clsx("w-5 h-5 mr-3 transition-colors", isActive ? "text-purple-600" : "text-gray-400")} />
                                     {item.name}
                                 </Link>
                             );
@@ -65,20 +99,20 @@ export default function ReceptionLayout() {
                     </nav>
                 </div>
 
-                <div className="p-4 border-t">
+                <div className="p-4 border-t bg-gray-50/50">
                     <button
                         onClick={logout}
-                        className="flex items-center w-full px-4 py-2 text-sm text-red-600 rounded-md hover:bg-red-50 transition-colors"
+                        className="flex items-center w-full px-4 py-2 text-sm font-medium text-red-600 rounded-xl hover:bg-red-50 transition-colors border border-transparent hover:border-red-100"
                     >
                         <LogOut className="w-5 h-5 mr-3" />
                         Logout
                     </button>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Main Content */}
-            <div className="flex-1 overflow-auto bg-gray-50">
-                <main className="p-8">
+            <div className="flex-1 overflow-auto bg-gray-50 pt-16 lg:pt-0">
+                <main className="p-4 md:p-8 max-w-7xl mx-auto">
                     <Outlet />
                 </main>
             </div>

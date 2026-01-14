@@ -5,7 +5,7 @@ import { Activity } from 'lucide-react';
 
 const SocketContext = createContext();
 
-const SOCKET_URL = "https://hospital-6f4k.onrender.com";
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export const SocketProvider = ({ children }) => {
     const socket = useRef();

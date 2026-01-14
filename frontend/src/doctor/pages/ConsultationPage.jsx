@@ -89,27 +89,19 @@ export default function ConsultationPage() {
 
             {/* Patient Header */}
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <div className="flex flex-col md:flex-row justify-between items-start gap-4">
+                <div className="flex justify-between items-start">
                     <div>
-                        <h2 className="text-xl md:text-2xl font-bold text-gray-900">{appointment.patient?.user?.name}</h2>
-                        <div className="text-sm text-gray-500 mt-1 flex flex-wrap gap-x-3 gap-y-1">
-                            <span>{appointment.patient?.gender}</span>
-                            <span>{format(new Date(appointment.patient?.dateOfBirth), 'yyyy-MM-dd')}</span>
-                            <span>{appointment.patient?.bloodGroup}</span>
-                        </div>
-                        <p className="text-sm text-gray-500 mt-1">Phone: {appointment.patient?.user?.phone}</p>
+                        <h2 className="text-2xl font-bold text-gray-900">{appointment.patient?.user?.name}</h2>
+                        <p className="text-gray-500">
+                            {appointment.patient?.gender} • {format(new Date(appointment.patient?.dateOfBirth), 'yyyy-MM-dd')} • {appointment.patient?.bloodGroup}
+                        </p>
+                        <p className="text-gray-500 mt-1">Phone: {appointment.patient?.user?.phone}</p>
                     </div>
-                    <div className="md:text-right w-full md:w-auto pt-4 md:pt-0 border-t md:border-t-0 border-gray-100">
-                        <div className="grid grid-cols-2 md:block gap-4">
-                            <div>
-                                <p className="text-xs text-gray-500 uppercase tracking-wider">ID</p>
-                                <p className="font-mono text-gray-900">{appointment._id.substr(-6).toUpperCase()}</p>
-                            </div>
-                            <div className="md:mt-4">
-                                <p className="text-xs text-gray-500 uppercase tracking-wider">Date</p>
-                                <p className="font-medium text-gray-900">{format(new Date(appointment.appointmentDate), 'MMM dd, yyyy')}</p>
-                            </div>
-                        </div>
+                    <div className="text-right">
+                        <p className="text-sm text-gray-500">Appointment ID</p>
+                        <p className="font-mono text-gray-900">{appointment._id.substr(-6).toUpperCase()}</p>
+                        <p className="mt-2 text-sm text-gray-500">Date</p>
+                        <p className="font-medium text-gray-900">{format(new Date(appointment.appointmentDate), 'MMM dd, yyyy')}</p>
                     </div>
                 </div>
             </div>

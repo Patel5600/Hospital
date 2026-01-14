@@ -40,7 +40,7 @@ export default function Login() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="w-full max-w-5xl min-h-[600px] md:h-[600px] bg-white/70 backdrop-blur-xl rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-white/50 relative z-10"
+                className="w-full max-w-5xl h-[600px] bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-white/50 relative z-10"
             >
 
                 {/* LEFT SIDE: Visual/Illustration */}

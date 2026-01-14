@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../../utils/api';
+import api from '../../config/api';
 import toast from 'react-hot-toast';
 import { Plus, Trash2, ArrowLeft } from 'lucide-react';
 import { format } from 'date-fns';

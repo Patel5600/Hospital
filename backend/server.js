@@ -20,14 +20,15 @@ const { init: initSocket } = require('./utils/socketUtils'); // Import socket in
 connectDB();
 
 const app = express();
+app.set('trust proxy', 1); // Trust first proxy (e.g. Render)
 const server = http.createServer(app); // Create HTTP server
 
 // Initialize Socket.io
 initSocket(server);
 
-// Body parser
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Body parser with size limit
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // Security Middleware
 app.use(helmet());
@@ -36,23 +37,48 @@ app.use(xss());
 app.use(hpp());
 
 // Rate limiting
-// Rate limiting
 const limiter = rateLimit({
-    windowMs: 10 * 60 * 1000,
-    max: 1000 // Increased for development
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per 15 minutes
+    message: 'Too many requests from this IP, please try again after 15 minutes'
 });
+
+// Strict rate limiting for auth routes
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 20, // Limit each IP to 20 requests per 15 minutes
+    message: 'Too many auth attempts from this IP, please try again after 15 minutes'
+});
+
 app.use(limiter);
 
-// Enable CORS
-app.use(cors());
+// CORS Lockdown
+const allowedOrigins = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',').map(origin => origin.trim()) : ['http://localhost:3000', 'http://localhost:5173'];
+app.use(cors({
+    origin: function (origin, callback) {
+        // allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
+    credentials: true
+}));
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
+// Root route
+app.get('/', (req, res) => {
+    res.status(200).send('Hospital Backend API is running');
+});
+
 // Mount routers
-app.use('/api/auth', require('./routes/auth'));
+app.use('/api/auth', authLimiter, require('./routes/auth'));
 app.use('/api/patients', require('./routes/patients'));
 app.use('/api/doctors', require('./routes/doctors'));
 app.use('/api/appointments', require('./routes/appointments'));

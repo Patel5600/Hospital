@@ -5,7 +5,7 @@ import { Activity } from 'lucide-react';
 
 const SocketContext = createContext();
 
-const SOCKET_URL = window.location.hostname === 'localhost' ? "http://localhost:5000" : window.location.origin;
+const SOCKET_URL = "https://hospital-6f4k.onrender.com";
 
 export const SocketProvider = ({ children }) => {
     const socket = useRef();

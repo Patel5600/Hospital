@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import api from '../../utils/api';
+import api from '../../config/api';
 import { Calendar, FileText, CreditCard } from 'lucide-react';
 import { format } from 'date-fns';
 

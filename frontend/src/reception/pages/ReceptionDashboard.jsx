@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import api from '../../utils/api';
+import api from '../../config/api';
 import { Users, Calendar, Clock, CreditCard } from 'lucide-react';
 
 export default function ReceptionDashboard() {

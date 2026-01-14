@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api from '../../utils/api';
+import api from '../../config/api';
 import { CreditCard, CheckCircle, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 
